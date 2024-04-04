@@ -22,6 +22,6 @@ module.exports = {
 		];
 		
 		const randomIndex = Math.floor(Math.random() * fortunes.length);
-		await interaction.reply(`${interaction.member.nickname || interaction.user.username}の運勢は${fortunes[randomIndex]}です！`);
+		await interaction.reply(`${interaction.member.displayName}の運勢は${fortunes[randomIndex]}です！`);
 	},
 };
