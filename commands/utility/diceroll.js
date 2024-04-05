@@ -12,13 +12,13 @@ module.exports = {
 			option.setName('sides')
 				.setDescription('ダイスの面数')
 				.setRequired(true))
-                .addChoice('1', 4)
-				.addChoice('2', 6)
-                .addChoice('3', 8)
-                .addChoice('4', 10)
-                .addChoice('5', 12)
-                .addChoice('6', 20)
-                .addChoice('7', 100),
+                .addChoice('4', 1)
+				.addChoice('6', 2)
+                .addChoice('8', 3)
+                .addChoice('19', 4)
+                .addChoice('12', 5)
+                .addChoice('20', 6)
+                .addChoice('100', 7),
 
 	async execute(interaction) {
 		const dice = interaction.options.getInteger('dice');
