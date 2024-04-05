@@ -4,24 +4,18 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('diceroll')
 		.setDescription('Roll the dice!')
-		.addStringOption(option =>
+		.addIntegerOption(option =>
 			option.setName('dice')
 				.setDescription('ダイスの個数')
-				.setRequired(true)
-                .addChoice('1', '1')
-                .addChoice('2', '2')
-                .addChoice('3', '3'))
-		.addStringOption(option =>
+				.setRequired(true))
+		.addIntegerOption(option =>
 			option.setName('sides')
 				.setDescription('ダイスの面数')
-				.setRequired(true)
-                .addChoice('6', '6')
-                .addChoice('8', '8')
-                .addChoice('10', '10')),
+				.setRequired(true)),
 
 	async execute(interaction) {
-		const dice = interaction.options.getString('dice');
-		const sides = interaction.options.getString('sides');
+		const dice = interaction.options.getInteger('dice');
+		const sides = interaction.options.getInteger('sides');
 		let results = [];
 		let total = 0;
 
