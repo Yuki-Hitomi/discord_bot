@@ -9,7 +9,7 @@ module.exports = {
 				.setDescription('ダイスの個数')
 				.setRequired(true)
                 .setMaxValue(100)
-                .etMinValue(1))
+                .setMinValue(1))
 		.addIntegerOption(option =>
 			option.setName('sides')
 				.setDescription('ダイスの面数')
