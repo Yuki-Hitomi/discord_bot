@@ -21,11 +21,10 @@ module.exports = {
 
 		for(let i = 0; i < dice; i++) {
 			let roll = Math.floor(Math.random() * sides) + 1;
-			results.push(roll);
+			results.push(`ダイス${i+1}: ${roll}`);
 			total += roll;
 		}
 
-		let resultsTable = results.map((result, index) => `| ダイス${index + 1} | ${result} |`).join('\n');
-		await interaction.reply(`ダイスを振った結果は ${total} です！それぞれのダイスの結果は次のとおりです：\n| ダイス | 結果 |\n| --- | --- |\n${resultsTable}`);
+		await interaction.reply(`ダイスを振った結果は ${total} です！それぞれのダイスの結果は次のとおりです：\n${results.join('\n')}`);
 	},
 };
