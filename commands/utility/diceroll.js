@@ -25,7 +25,7 @@ module.exports = {
 			total += roll;
 		}
 
-		let resultsList = results.map((result, index) => `ダイス${index + 1}: ${result}`).join('\n');
-		await interaction.reply(`ダイスの合計は ${total} です！それぞれのダイスの結果は次のとおりです：\n${resultsList}`);
+		let resultsTable = results.map((result, index) => `| ダイス${index + 1} | ${result} |`).join('\n');
+		await interaction.reply(`ダイスを振った結果は ${total} です！それぞれのダイスの結果は次のとおりです：\n| ダイス | 結果 |\n| --- | --- |\n${resultsTable}`);
 	},
 };
