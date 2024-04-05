@@ -36,6 +36,6 @@ module.exports = {
 			total += roll;
 		}
 
-		await interaction.reply(`ダイスを振った結果は ${total} です！\nそれぞれのダイスの結果は次のとおりです：\n${results.join('\n')}`);
+		await interaction.reply(`${dice}D${sides}の結果は ${total} です！\n${results.join('\n')}`);
 	},
 };
