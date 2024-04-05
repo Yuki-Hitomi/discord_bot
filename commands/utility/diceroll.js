@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('roll')
+		.setName('diceroll')
 		.setDescription('Roll the dice!')
 		.addIntegerOption(option =>
 			option.setName('dice')
@@ -25,6 +25,7 @@ module.exports = {
 			total += roll;
 		}
 
-		await interaction.reply(`ダイスを振った結果は ${total} です！それぞれのダイスの結果は次のとおりです：${results.join(', ')}`);
+		let resultsList = results.map((result, index) => `ダイス${index + 1}: ${result}`).join('\n');
+		await interaction.reply(`ダイスを振った結果は ${total} です！それぞれのダイスの結果は次のとおりです：\n${resultsList}`);
 	},
 };
