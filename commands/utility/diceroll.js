@@ -11,14 +11,7 @@ module.exports = {
 		.addIntegerOption(option =>
 			option.setName('sides')
 				.setDescription('ダイスの面数')
-				.setRequired(true))
-                .addChoice('4', 1)
-				.addChoice('6', 2)
-                .addChoice('8', 3)
-                .addChoice('19', 4)
-                .addChoice('12', 5)
-                .addChoice('20', 6)
-                .addChoice('100', 7),
+				.setRequired(true)),
 
 	async execute(interaction) {
 		const dice = interaction.options.getInteger('dice');
