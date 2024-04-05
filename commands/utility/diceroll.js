@@ -11,7 +11,14 @@ module.exports = {
 		.addIntegerOption(option =>
 			option.setName('sides')
 				.setDescription('ダイスの面数')
-				.setRequired(true)),
+				.setRequired(true))
+                .addChoice('1', 4)
+				.addChoice('2', 6)
+                .addChoice('3', 8)
+                .addChoice('4', 10)
+                .addChoice('5', 12)
+                .addChoice('6', 20)
+                .addChoice('7', 100),
 
 	async execute(interaction) {
 		const dice = interaction.options.getInteger('dice');
@@ -21,7 +28,7 @@ module.exports = {
 
 		for(let i = 0; i < dice; i++) {
 			let roll = Math.floor(Math.random() * sides) + 1;
-			results.push(`ダイス${i+1}: ${roll}`);
+			results.push(`ダイス${(i+1).toString().padStart(3, '0')}: ${roll}`);
 			total += roll;
 		}
 
