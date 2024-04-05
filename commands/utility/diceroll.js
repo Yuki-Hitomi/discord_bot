@@ -12,15 +12,15 @@ module.exports = {
 			option.setName('sides')
 				.setDescription('ダイスの面数')
 				.setRequired(true))
-                .choices([
-                    {name: "4", value: "4"},
-                    {name: "6", value: "6"},
-                    {name: "8", value: "8"},
-                    {name: "10", value: "10"},
-                    {name: "12", value: "12"},
-                    {name: "20", value: "20"},
-                    {name: "100", value: "100"},
-                ]),
+                .addChoices(
+                    {name: "4", value: 4},
+                    {name: "6", value: 6},
+                    {name: "8", value: 8},
+                    {name: "10", value: 10},
+                    {name: "12", value: 12},
+                    {name: "20", value: 20},
+                    {name: "100", value: 100},
+                ),
 
 	async execute(interaction) {
 		const dice = interaction.options.getInteger('dice');
