@@ -8,7 +8,7 @@ module.exports = {
 			option.setName('dice')
 				.setDescription('ダイスの個数')
 				.setRequired(true)
-                .setMaxValue(100)
+                .setMaxValue(99)
                 .setMinValue(1))
 		.addIntegerOption(option =>
 			option.setName('sides')
