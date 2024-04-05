@@ -26,6 +26,6 @@ module.exports = {
 		}
 
 		let resultsList = results.map((result, index) => `ダイス${index + 1}: ${result}`).join('\n');
-		await interaction.reply(`ダイスを振った結果は ${total} です！それぞれのダイスの結果は次のとおりです：\n${resultsList}`);
+		await interaction.reply(`ダイスの合計は ${total} です！それぞれのダイスの結果は次のとおりです：\n${resultsList}`);
 	},
 };
