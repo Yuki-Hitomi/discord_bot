@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('fortune')
-		.setDescription('Get your fortune!'),
+		.setDescription('おみくじを行います。'),
 		
 	async execute(interaction) {
 		const fortunes = [
