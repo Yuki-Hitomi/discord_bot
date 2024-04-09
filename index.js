@@ -50,12 +50,4 @@ client.on(Events.InteractionCreate, async interaction => {
 	}
 });
 
-async function login() {
-    try {
-        await client.login(token);
-    } catch (error) {
-        console.error('Failed to log in:', error);
-    }
-}
-
-login();
+client.login(token);
