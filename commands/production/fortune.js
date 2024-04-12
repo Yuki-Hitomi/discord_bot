@@ -23,6 +23,6 @@ module.exports = {
 		
 		const randomIndex = Math.floor(Math.random() * fortunes.length);
 		await interaction.reply(`${interaction.member.displayName}の運勢は${fortunes[randomIndex]}です！`);
-		console.log(`${interaction.member.username} executed the /fortune command.`);
+		console.log(`${interaction.user.username} executed the /fortune command.`);
 	},
 };
