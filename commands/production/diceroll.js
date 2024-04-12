@@ -37,5 +37,6 @@ module.exports = {
 		}
 
 		await interaction.reply(`${dice}D${sides}の結果は ${total} です！\n${results.join('\n')}`);
+		console.log(`${interaction.member.username} executed the /diceroll command.`);
 	},
 };
