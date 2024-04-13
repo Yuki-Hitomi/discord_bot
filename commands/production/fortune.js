@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const logger = require('../../logger');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -23,6 +24,6 @@ module.exports = {
 		
 		const randomIndex = Math.floor(Math.random() * fortunes.length);
 		await interaction.reply(`${interaction.member.displayName}の運勢は${fortunes[randomIndex]}です！`);
-		console.log(`/fortune was executed by ${interaction.user.username}`);
+		logger.log(`/fortune was executed by ${interaction.user.username}`);
 	},
 };

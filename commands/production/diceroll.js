@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const logger = require('../../logger');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -37,6 +38,6 @@ module.exports = {
 		}
 
 		await interaction.reply(`${dice}D${sides}の結果は ${total} です！\n${results.join('\n')}`);
-		console.log(`/diceroll was executed by ${interaction.user.username}`);
+		logger.log(`/diceroll was executed by ${interaction.user.username}`);
 	},
 };
