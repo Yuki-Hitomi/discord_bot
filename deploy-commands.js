@@ -27,9 +27,9 @@ const rest = new REST().setToken(token);
 if (guildId) {
     rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
         .then(() => logger.log('Successfully reloaded all guild commands.'))
-        .catch(console.error);
+        .catch(logger.error);
 } else {
     rest.put(Routes.applicationCommands(clientId), { body: commands })
         .then(() => logger.log('Successfully reloaded all global commands.'))
-        .catch(console.error);
+        .catch(logger.error);
 }
