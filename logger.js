@@ -5,7 +5,7 @@ function log(message) {
   
   module.exports = { log };
 
-  function error(message) {
+function error(message) {
     const timestamp = new Date().toISOString();
     console.error(`[${timestamp}] ${message}`);
   }
