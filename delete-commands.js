@@ -7,9 +7,9 @@ const rest = new REST().setToken(token);
 if (guildId) {
     rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: [] })
         .then(() => logger.log('Successfully deleted all guild commands.'))
-        .catch(console.error);
+        .catch(logger.error);
 } else {
     rest.put(Routes.applicationCommands(clientId), { body: [] })
         .then(() => logger.log('Successfully deleted all global commands.'))
-        .catch(console.error);
+        .catch(logger.error);
 }
