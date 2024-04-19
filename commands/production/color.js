@@ -8,7 +8,7 @@ module.exports = {
     async execute(interaction) {
         const randomColor = getRandomColor();
         
-        await interaction.reply({ content: `${interaction.member.displayName}のラッキーカラーは#${randomColor.toUpperCase()}です！`, embeds: [createColorEmbed(randomColor)] });
+        await interaction.reply({ content: `${interaction.member.displayName}のラッキーカラーは #${randomColor.toUpperCase()} です！`, embeds: [createColorEmbed(randomColor)] });
         
         logger.log(`/color was executed by ${interaction.user.username}`);
     },
@@ -22,6 +22,9 @@ function getRandomColor() {
 function createColorEmbed(color) {
     return {
         color: parseInt(color, 16),
-        description: `#${color.toUpperCase()}`,
+        title: `#${color.toUpperCase()}`,
+        thumbnail: {
+            url: `https://dummyimage.com/250x250/${color}/${color}`,
+        },
     };
 }
