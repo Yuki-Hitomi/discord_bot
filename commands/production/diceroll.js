@@ -4,7 +4,7 @@ const logger = require('../../logger');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('diceroll')
-		.setDescription('ダイスロールを行います。')
+		.setDescription('ダイスロールの結果を表示します。')
 		.addIntegerOption(option =>
 			option.setName('dice')
 				.setDescription('ダイスの個数')
