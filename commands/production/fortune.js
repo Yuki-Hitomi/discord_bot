@@ -4,7 +4,7 @@ const logger = require('../../logger');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('fortune')
-		.setDescription('おみくじを行います。'),
+		.setDescription('運勢を表示します。'),
 		
 	async execute(interaction) {
 		const fortunes = [
