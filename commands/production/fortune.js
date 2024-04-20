@@ -23,17 +23,8 @@ module.exports = {
 
         await interaction.reply({
             content: `${interaction.member.displayName}の運勢は${fortunes[randomFortuneIndex]}です！\nラッキーカラーは #${randomColor.toUpperCase()} です！`,
-            files: [{ 
-				ttachment: canvas.toBuffer(),
-				name: 'color.png'
-			}],
-            embeds: [{
-				title: `#${randomColor.toUpperCase()}`,
-				color: parseInt(randomColor, 16),
-				thumbnail: {
-					url: 'attachment://color.png',
-				},
-			}]
+            files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
+            embeds: [embed]
         });
 
         logger.log(`/fortune was executed by ${interaction.user.username}`);
