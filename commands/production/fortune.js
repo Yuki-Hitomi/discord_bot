@@ -13,18 +13,19 @@ module.exports = {
         const randomColor = getRandomColor();
         const canvas = createColorCanvas(randomColor);
 
-        const embed = {
-            title: `#${randomColor.toUpperCase()}`,
-            color: parseInt(randomColor, 16),
-            thumbnail: {
-                url: 'attachment://color.png',
-            },
-        };
-
         await interaction.reply({
             content: `${interaction.member.displayName}の運勢は${fortunes[randomFortuneIndex]}です！\nラッキーカラーは #${randomColor.toUpperCase()} です！`,
-            files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
-            embeds: [embed]
+            files: [{ 
+				ttachment: canvas.toBuffer(),
+				name: 'color.png'
+			}],
+            embeds: [{
+				title: `#${randomColor.toUpperCase()}`,
+				color: parseInt(randomColor, 16),
+				thumbnail: {
+					url: 'attachment://color.png'
+				}
+			}]
         });
 
         logger.log(`/fortune was executed by ${interaction.user.username}`);
