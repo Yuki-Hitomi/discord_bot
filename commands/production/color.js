@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { createCanvas } = require('canvas');
 const logger = require('../../logger');
 
 module.exports = {
@@ -7,8 +8,17 @@ module.exports = {
         .setDescription('ラッキーカラーを表示します。'),
     async execute(interaction) {
         const randomColor = getRandomColor();
+        const canvas = createColorCanvas(randomColor);
         
-        await interaction.reply({ content: `${interaction.member.displayName}のラッキーカラーは #${randomColor.toUpperCase()} です！`, embeds: [createColorEmbed(randomColor)] });
+        const embed = {
+            title: `#${randomColor.toUpperCase()}`,
+            color: parseInt(randomColor, 16),
+            thumbnail: {
+                url: 'attachment://color.png',
+            },
+        };
+        
+        await interaction.reply({ content: `${interaction.member.displayName}のラッキーカラーは #${randomColor.toUpperCase()} です！`, files: [{ attachment: canvas.toBuffer(), name: 'color.png' }], embeds: [embed] });
         
         logger.log(`/color was executed by ${interaction.user.username}`);
     },
@@ -19,12 +29,12 @@ function getRandomColor() {
     return color;
 }
 
-function createColorEmbed(color) {
-    return {
-        color: parseInt(color, 16),
-        title: `#${color.toUpperCase()}`,
-        thumbnail: {
-            url: `https://dummyimage.com/250x250/${color}/${color}`,
-        },
-    };
+function createColorCanvas(color) {
+    const canvas = createCanvas(250, 250);
+    const context = canvas.getContext('2d');
+    
+    context.fillStyle = `#${color}`;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    
+    return canvas;
 }
