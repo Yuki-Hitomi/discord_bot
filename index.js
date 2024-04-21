@@ -4,7 +4,13 @@ const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 const logger = require('./logger');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ 
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildVoiceStates
+    ]
+});
+
 
 client.once(Events.ClientReady, readyClient => {
 	logger.log(`Ready! Logged in as ${readyClient.user.tag}`);
@@ -30,6 +36,7 @@ for (const folder of commandFolders) {
 }
 
 client.on(Events.InteractionCreate, async interaction => {
+	logger.log('InteractionCreate event triggered.');
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = interaction.client.commands.get(interaction.commandName);
@@ -49,6 +56,16 @@ client.on(Events.InteractionCreate, async interaction => {
 			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 		}
 	}
+});
+
+client.on(Events.VoiceStateUpdate, (oldState, newState) => {
+    logger.log('VoiceStateUpdate event triggered.');
+
+    if (!oldState.channel && newState.channel) {
+        newState.channel.send(`${newState.member.displayName} がボイスチャンネルに接続しました。`);
+    } else if (oldState.channel && !newState.channel) {
+        oldState.channel.send(`${oldState.member.displayName} がボイスチャンネルから切断されました。`);
+    }
 });
 
 client.login(token);
