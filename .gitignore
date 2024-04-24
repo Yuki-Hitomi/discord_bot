@@ -1,3 +1,4 @@
 node_modules
+database
 config.json
-commands/development
+src/commands/development
