@@ -27,7 +27,7 @@ module.exports = {
             embeds: [embed]
         });
 
-        logger.log(`/fortune was executed by ${interaction.user.username}`);
+        logger.info(`/fortune was executed by ${interaction.user.username}`);
     },
 };
 

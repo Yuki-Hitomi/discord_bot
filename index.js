@@ -7,7 +7,7 @@ const logger = require('./logger');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.once(Events.ClientReady, readyClient => {
-	logger.log(`Ready! Logged in as ${readyClient.user.tag}`);
+	logger.info(`Ready! Logged in as ${readyClient.user.tag}`);
 });
 
 client.commands = new Collection();
@@ -24,7 +24,7 @@ for (const folder of commandFolders) {
 		if ('data' in command && 'execute' in command) {
 			client.commands.set(command.data.name, command);
 		} else {
-			logger.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+			logger.info(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 		}
 	}
 }

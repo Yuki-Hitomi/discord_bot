@@ -38,6 +38,6 @@ module.exports = {
 		}
 
 		await interaction.reply(`${dice}D${sides}の結果は ${total} です！\n${results.join('\n')}`);
-		logger.log(`/diceroll was executed by ${interaction.user.username}`);
+		logger.info(`/diceroll was executed by ${interaction.user.username}`);
 	},
 };

@@ -1,6 +1,6 @@
-function log(message) {
+function info(message) {
   const timestamp = new Date().toISOString();
-  console.log(`[${timestamp}] ${message}`);
+  console.info(`[${timestamp}] ${message}`);
 }
 
 function error(message) {
@@ -8,4 +8,4 @@ function error(message) {
   console.error(`[${timestamp}] ${message}`);
 }
 
-module.exports = { log, error };
+module.exports = { info, error };
