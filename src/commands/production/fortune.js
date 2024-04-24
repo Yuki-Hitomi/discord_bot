@@ -1,6 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { createCanvas } = require('canvas');
-const logger = require('../../logger');
+const sqlite3 = require('sqlite3').verbose();
+
+const db = new sqlite3.Database('database/fortunes.db');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -8,26 +10,32 @@ module.exports = {
         .setDescription('運勢とラッキーカラーを表示します。'),
 
     async execute(interaction) {
-        const fortunes = ['大吉', '中吉', '小吉', '吉', '半吉', '末吉', '末小吉', '凶', '小凶', '半凶', '末凶', '大凶'];
-        const randomFortuneIndex = Math.floor(Math.random() * fortunes.length);
-        const randomColor = getRandomColor();
-        const canvas = createColorCanvas(randomColor);
+        db.get('SELECT fortune_text FROM fortunes ORDER BY RANDOM() LIMIT 1', async (err, row) => {
+            if (err) {
+                console.error(err.message);
+                return;
+            }
 
-        const embed = {
-            title: `#${randomColor.toUpperCase()}`,
-            color: parseInt(randomColor, 16),
-            thumbnail: {
-                url: 'attachment://color.png',
-            },
-        };
+            const fortune = row.fortune_text;
+            const randomColor = getRandomColor();
+            const canvas = createColorCanvas(randomColor);
 
-        await interaction.reply({
-            content: `${interaction.member.displayName}の運勢は${fortunes[randomFortuneIndex]}です！\nラッキーカラーは #${randomColor.toUpperCase()} です！`,
-            files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
-            embeds: [embed]
+            const embed = {
+                title: `#${randomColor.toUpperCase()}`,
+                color: parseInt(randomColor, 16),
+                thumbnail: {
+                    url: 'attachment://color.png',
+                },
+            };
+
+            await interaction.reply({
+                content: `${interaction.member.displayName}の運勢は${fortune}です！\nラッキーカラーは #${randomColor.toUpperCase()} です！`,
+                files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
+                embeds: [embed]
+            });
+
+            console.info(`/fortune was executed by ${interaction.user.username}`);
         });
-
-        logger.info(`/fortune was executed by ${interaction.user.username}`);
     },
 };
 
