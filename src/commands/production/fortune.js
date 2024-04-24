@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { createCanvas } = require('canvas');
 const sqlite3 = require('sqlite3').verbose();
 
-const db = new sqlite3.Database('database/fortunes.db');
+const db = new sqlite3.Database('database/baird.db');
 
 module.exports = {
     data: new SlashCommandBuilder()
