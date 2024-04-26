@@ -10,21 +10,20 @@ module.exports = {
         .setDescription('運勢とラッキーカラーを表示します。'),
 
     async execute(interaction) {
-        const fortune = await getRandomFortune();
-
-        const randomColor = getRandomColor();
-        const canvas = createColorCanvas(randomColor);
+        const fortune_text = await getRandomFortune();
+        const { color_text, color_code } = await getRandomColor();
+        const canvas = createColorCanvas(color_code);
 
         const embed = {
-            title: `#${randomColor.toUpperCase()}`,
-            color: parseInt(randomColor, 16),
+            title: `${color_text} (#${color_code.toUpperCase()})`,
+            color: parseInt(color_code, 16),
             thumbnail: {
                 url: 'attachment://color.png',
             },
         };
 
         await interaction.reply({
-            content: `${interaction.member.displayName}の運勢は${fortune}です！\nラッキーカラーは #${randomColor.toUpperCase()} です！`,
+            content: `${interaction.member.displayName}の運勢は${fortune_text}です！\nラッキーカラーは ${color_text} です！`,
             files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
             embeds: [embed]
         });
@@ -32,21 +31,6 @@ module.exports = {
         console.info(`/fortune was executed by ${interaction.user.username}`);
     },
 };
-
-function getRandomColor() {
-    const color = Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-    return color;
-}
-
-function createColorCanvas(color) {
-    const canvas = createCanvas(250, 250);
-    const context = canvas.getContext('2d');
-
-    context.fillStyle = `#${color}`;
-    context.fillRect(0, 0, canvas.width, canvas.height);
-
-    return canvas;
-}
 
 function getRandomFortune() {
     return new Promise((resolve, reject) => {
@@ -59,4 +43,27 @@ function getRandomFortune() {
             resolve(row.fortune_text);
         });
     });
+}
+
+function getRandomColor() {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT color_text, color_code FROM colors ORDER BY RANDOM() LIMIT 1', (err, row) => {
+            if (err) {
+                console.error(err.message);
+                reject(err);
+                return;
+            }
+            resolve({ color_text: row.color_text, color_code: row.color_code });
+        });
+    });
+}
+
+function createColorCanvas(color_code) {
+    const canvas = createCanvas(250, 250);
+    const context = canvas.getContext('2d');
+
+    context.fillStyle = `#${color_code}`;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    return canvas;
 }
