@@ -71,7 +71,6 @@ function createColorCanvas(color_code) {
 }
 
 function recordFortuneResult(user_id, fortune_id, color_id) {
-    const timestamp = new Date().toISOString();
     db.get('SELECT id FROM fortune_results WHERE user_id = ?', [user_id], (err, row) => {
         if (err) {
             console.error('Error checking for existing record:', err.message);
