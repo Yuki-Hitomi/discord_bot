@@ -71,14 +71,14 @@ function createColorCanvas(color_code) {
 }
 
 function recordFortuneResult(user_id, fortune_id, color_id) {
-    db.get('SELECT id FROM fortune_results WHERE user_id = ?', [user_id], (err, row) => {
+    db.get('SELECT id FROM fortune_results WHERE user_id = ? AND delete_flg = 0', [user_id], (err, row) => {
         if (err) {
             console.error('Error checking for existing record:', err.message);
             return;
         }
         if (row) {
             db.run(
-                'UPDATE fortune_results SET fortune_id = ?, color_id = ? WHERE user_id = ?',
+                'UPDATE fortune_results SET fortune_id = ?, color_id = ? WHERE user_id = ? AND delete_flg = 0',
                 [fortune_id, color_id, user_id],
                 (updateErr) => {
                     if (updateErr) {
