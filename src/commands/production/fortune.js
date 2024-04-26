@@ -10,32 +10,26 @@ module.exports = {
         .setDescription('運勢とラッキーカラーを表示します。'),
 
     async execute(interaction) {
-        db.get('SELECT fortune_text FROM fortunes ORDER BY RANDOM() LIMIT 1', async (err, row) => {
-            if (err) {
-                console.error(err.message);
-                return;
-            }
+        const fortune = await getRandomFortune();
 
-            const fortune = row.fortune_text;
-            const randomColor = getRandomColor();
-            const canvas = createColorCanvas(randomColor);
+        const randomColor = getRandomColor();
+        const canvas = createColorCanvas(randomColor);
 
-            const embed = {
-                title: `#${randomColor.toUpperCase()}`,
-                color: parseInt(randomColor, 16),
-                thumbnail: {
-                    url: 'attachment://color.png',
-                },
-            };
+        const embed = {
+            title: `#${randomColor.toUpperCase()}`,
+            color: parseInt(randomColor, 16),
+            thumbnail: {
+                url: 'attachment://color.png',
+            },
+        };
 
-            await interaction.reply({
-                content: `${interaction.member.displayName}の運勢は${fortune}です！\nラッキーカラーは #${randomColor.toUpperCase()} です！`,
-                files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
-                embeds: [embed]
-            });
-
-            console.info(`/fortune was executed by ${interaction.user.username}`);
+        await interaction.reply({
+            content: `${interaction.member.displayName}の運勢は${fortune}です！\nラッキーカラーは #${randomColor.toUpperCase()} です！`,
+            files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
+            embeds: [embed]
         });
+
+        console.info(`/fortune was executed by ${interaction.user.username}`);
     },
 };
 
@@ -52,4 +46,17 @@ function createColorCanvas(color) {
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     return canvas;
+}
+
+function getRandomFortune() {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT fortune_text FROM fortunes ORDER BY RANDOM() LIMIT 1', (err, row) => {
+            if (err) {
+                console.error(err.message);
+                reject(err);
+                return;
+            }
+            resolve(row.fortune_text);
+        });
+    });
 }
