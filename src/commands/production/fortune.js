@@ -53,7 +53,7 @@ module.exports = {
                 };
         
                 await interaction.reply({
-                    content: `${interaction.member.displayName}の運勢は${fortune_text}です！\nラッキーカラーは #${color_code} です！`,
+                    content: `今日の${interaction.member.displayName}の運勢は${fortune_text}です！\nラッキーカラーは #${color_code} です！`,
                     files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
                     embeds: [embed]
                 });
