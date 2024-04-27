@@ -10,15 +10,7 @@ module.exports = {
         .setDescription('今日の運勢とラッキーカラーを表示します。'),
 
     async execute(interaction) {
-        const currentDate = new Date();
-
-        const year = currentDate.getFullYear();
-        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-        const day = String(currentDate.getDate()).padStart(2, '0');
-
-        const formattedDate = `${year}-${month}-${day}`;
-
-        db.get('SELECT * FROM fortune_results WHERE user_id = ? AND DATE(updated_at) = DATE(?)', [interaction.user.id, formattedDate], async (err, row) => {
+        db.get('SELECT * FROM fortune_results WHERE user_id = ? AND DATE(updated_at) = DATE(\'now\', \'localtime\')', [interaction.user.id], async (err, row) => {
             if (err) {
                 console.error(err.message);
                 return;
@@ -47,11 +39,7 @@ module.exports = {
 
             const embed = {
                 title: `#${color_code}`,
-                description:
-                    `---DEBUG---\n` +
-                    `[DATE]\n${formattedDate}\n` +
-                    `[RGB]\nR: ${red}\nG: ${green}\nB: ${blue}\n` +
-                    `---DEBUG---`,
+                description:`[Red: ${red}, Green: ${green}, Blue: ${blue}]`,
                 color: parseInt(color_code, 16),
                 thumbnail: {
                     url: 'attachment://color.png',
