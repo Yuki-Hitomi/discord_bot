@@ -10,6 +10,8 @@ module.exports = {
         .setDescription('運勢とラッキーカラーを表示します。'),
 
     async execute(interaction) {
+        const currentDate = new Date();
+
         const { fortune_id, fortune_text } = await getRandomFortune();
         const color_code = getRandomColor();
         const canvas = createColorCanvas(color_code);
@@ -20,7 +22,11 @@ module.exports = {
 
         const embed = {
             title: `#${color_code}`,
-            description: `---DEBUG---\n[RGB]\nRed: ${red}\nGreen: ${green}\nBlue: ${blue}\n---DEBUG---`,
+            description: 
+            `---DEBUG---\n` + 
+            `[DATETIME]\n${currentDate.toLocaleString()}\n` +
+            `[RGB]\nR: ${red}\nG: ${green}\nB: ${blue}\n` +
+            `---DEBUG---`,
             color: parseInt(color_code, 16),
             thumbnail: {
                 url: 'attachment://color.png',
@@ -28,7 +34,7 @@ module.exports = {
         };
 
         await interaction.reply({
-            content: `${interaction.member.displayName}の運勢は**${fortune_text}**です！\nラッキーカラーは **#${color_code}** です！`,
+            content: `${interaction.member.displayName}の運勢は${fortune_text}です！\nラッキーカラーは #${color_code} です！`,
             files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
             embeds: [embed]
         });
