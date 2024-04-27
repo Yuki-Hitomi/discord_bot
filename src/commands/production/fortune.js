@@ -26,7 +26,7 @@ module.exports = {
                     fortune_text = fortuneRow.fortune_text;
                     color_code = row.color_code;
                 } else {
-                    const { id, fortune_text: text } = await getRandomFortune();
+                    const { fortune_id: id, fortune_text: text } = await getRandomFortune();
                     fortune_id = id;
                     fortune_text = text;
                     color_code = getRandomColor();
