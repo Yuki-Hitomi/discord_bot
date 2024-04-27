@@ -7,53 +7,60 @@ const db = new sqlite3.Database('database/baird.db');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('fortune')
-        .setDescription('運勢とラッキーカラーを表示します。'),
+        .setDescription('今日の運勢とラッキーカラーを表示します。'),
 
-    async execute(interaction) {
-        const formattedDate = new Date().toISOString().slice(0, 10);
+        async execute(interaction) {
+            const formattedDate = new Date().toISOString().slice(0, 10);
         
-        db.get('SELECT * FROM fortune_results WHERE user_id = ? AND DATE(updated_at) = DATE(?)', [interaction.user.id, formattedDate], (err, row) => {
-            if (err) {
-                console.error(err.message);
-                return;
-            }
-            if (row) {
-                console.log('日付と一致するデータが見つかりました:', row);
-            } else {
-                console.log('日付と一致するデータは見つかりませんでした。');
-            }
-        });
-        const { fortune_id, fortune_text } = await getRandomFortune();
-        const color_code = getRandomColor();
-        const canvas = createColorCanvas(color_code);
-
-        const red = parseInt(color_code.substring(0, 2), 16);
-        const green = parseInt(color_code.substring(2, 4), 16);
-        const blue = parseInt(color_code.substring(4, 6), 16);
-
-        const embed = {
-            title: `#${color_code}`,
-            description:
-                `---DEBUG---\n` +
-                `[DATE]\n${formattedDate.toString()}\n` +
-                `[RGB]\nR: ${red}\nG: ${green}\nB: ${blue}\n` +
-                `---DEBUG---`,
-            color: parseInt(color_code, 16),
-            thumbnail: {
-                url: 'attachment://color.png',
-            },
-        };
-
-        await interaction.reply({
-            content: `${interaction.member.displayName}の運勢は${fortune_text}です！\nラッキーカラーは #${color_code} です！`,
-            files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
-            embeds: [embed]
-        });
-
-        recordFortuneResult(interaction.user.id, fortune_id, color_code);
-
-        console.info(`/fortune was executed by ${interaction.user.username}`);
-    },
+            db.get('SELECT * FROM fortune_results WHERE user_id = ? AND DATE(updated_at) = DATE(?)', [interaction.user.id, formattedDate], async (err, row) => {
+                if (err) {
+                    console.error(err.message);
+                    return;
+                }
+                let fortune_id, fortune_text, color_code;
+        
+                if (row) {
+                    console.log('Data matching the date was found:', row);
+                    fortune_id = row.fortune_id;
+                    const fortuneRow = await getFortuneById(fortune_id);
+                    fortune_text = fortuneRow.fortune_text;
+                    color_code = row.color_code;
+                } else {
+                    const { id, fortune_text: text } = await getRandomFortune();
+                    fortune_id = id;
+                    fortune_text = text;
+                    color_code = getRandomColor();
+                    recordFortuneResult(interaction.user.id, fortune_id, color_code);
+                }
+        
+                const canvas = createColorCanvas(color_code);
+        
+                const red = parseInt(color_code.substring(0, 2), 16);
+                const green = parseInt(color_code.substring(2, 4), 16);
+                const blue = parseInt(color_code.substring(4, 6), 16);
+        
+                const embed = {
+                    title: `#${color_code}`,
+                    description:
+                        `---DEBUG---\n` +
+                        `[DATE]\n${formattedDate.toString()}\n` +
+                        `[RGB]\nR: ${red}\nG: ${green}\nB: ${blue}\n` +
+                        `---DEBUG---`,
+                    color: parseInt(color_code, 16),
+                    thumbnail: {
+                        url: 'attachment://color.png',
+                    },
+                };
+        
+                await interaction.reply({
+                    content: `${interaction.member.displayName}の運勢は${fortune_text}です！\nラッキーカラーは #${color_code} です！`,
+                    files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
+                    embeds: [embed]
+                });
+        
+                console.info(`/fortune was executed by ${interaction.user.username}`);
+            });
+        }
 };
 
 function getRandomFortune() {
@@ -65,6 +72,19 @@ function getRandomFortune() {
                 return;
             }
             resolve({ fortune_id: row.id, fortune_text: row.fortune_text });
+        });
+    });
+}
+
+function getFortuneById(id) {
+    return new Promise((resolve, reject) => {
+        db.get('SELECT fortune_text FROM fortunes WHERE id = ?', [id], (err, row) => {
+            if (err) {
+                console.error(err.message);
+                reject(err);
+                return;
+            }
+            resolve(row);
         });
     });
 }
