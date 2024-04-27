@@ -14,8 +14,13 @@ module.exports = {
         const color_code = getRandomColor();
         const canvas = createColorCanvas(color_code);
 
+        const red = parseInt(color_code.substring(0, 2), 16);
+        const green = parseInt(color_code.substring(2, 4), 16);
+        const blue = parseInt(color_code.substring(4, 6), 16);
+
         const embed = {
             title: `#${color_code}`,
+            description: `---DEBUG---\n[RGB]\nRed: ${red}\nGreen: ${green}\nBlue: ${blue}\n---DEBUG---`,
             color: parseInt(color_code, 16),
             thumbnail: {
                 url: 'attachment://color.png',
@@ -23,7 +28,7 @@ module.exports = {
         };
 
         await interaction.reply({
-            content: `${interaction.member.displayName}の運勢は${fortune_text}です！\nラッキーカラーは #${color_code} です！`,
+            content: `${interaction.member.displayName}の運勢は**${fortune_text}**です！\nラッキーカラーは **#${color_code}** です！`,
             files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
             embeds: [embed]
         });
