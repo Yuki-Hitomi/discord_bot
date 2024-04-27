@@ -11,11 +11,11 @@ module.exports = {
 
     async execute(interaction) {
         const { fortune_id, fortune_text } = await getRandomFortune();
-        const { color_id, color_text, color_code } = await getRandomColor();
+        const color_code = getRandomColor();
         const canvas = createColorCanvas(color_code);
 
         const embed = {
-            title: `${color_text} (#${color_code.toUpperCase()})`,
+            title: `#${color_code}`,
             color: parseInt(color_code, 16),
             thumbnail: {
                 url: 'attachment://color.png',
@@ -23,12 +23,12 @@ module.exports = {
         };
 
         await interaction.reply({
-            content: `${interaction.member.displayName}の運勢は${fortune_text}です！\nラッキーカラーは ${color_text} です！`,
+            content: `${interaction.member.displayName}の運勢は${fortune_text}です！\nラッキーカラーは #${color_code} です！`,
             files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
             embeds: [embed]
         });
 
-        recordFortuneResult(interaction.user.id, fortune_id, color_id);
+        recordFortuneResult(interaction.user.id, fortune_id, color_code);
 
         console.info(`/fortune was executed by ${interaction.user.username}`);
     },
@@ -48,16 +48,8 @@ function getRandomFortune() {
 }
 
 function getRandomColor() {
-    return new Promise((resolve, reject) => {
-        db.get('SELECT id, color_text, color_code FROM colors ORDER BY RANDOM() LIMIT 1', (err, row) => {
-            if (err) {
-                console.error(err.message);
-                reject(err);
-                return;
-            }
-            resolve({ color_id: row.id, color_text: row.color_text, color_code: row.color_code });
-        });
-    });
+    const color_code = Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0').toUpperCase();
+    return color_code;
 }
 
 function createColorCanvas(color_code) {
@@ -70,7 +62,7 @@ function createColorCanvas(color_code) {
     return canvas;
 }
 
-function recordFortuneResult(user_id, fortune_id, color_id) {
+function recordFortuneResult(user_id, fortune_id, color_code) {
     db.get('SELECT id FROM fortune_results WHERE user_id = ? AND delete_flg = 0', [user_id], (err, row) => {
         if (err) {
             console.error('Error checking for existing record:', err.message);
@@ -78,8 +70,8 @@ function recordFortuneResult(user_id, fortune_id, color_id) {
         }
         if (row) {
             db.run(
-                'UPDATE fortune_results SET fortune_id = ?, color_id = ? WHERE user_id = ? AND delete_flg = 0',
-                [fortune_id, color_id, user_id],
+                'UPDATE fortune_results SET fortune_id = ?, color_code = ? WHERE user_id = ? AND delete_flg = 0',
+                [fortune_id, color_code, user_id],
                 (updateErr) => {
                     if (updateErr) {
                         console.error('Error updating fortune result:', updateErr.message);
@@ -90,8 +82,8 @@ function recordFortuneResult(user_id, fortune_id, color_id) {
             );
         } else {
             db.run(
-                'INSERT INTO fortune_results (user_id, fortune_id, color_id) VALUES (?, ?, ?)',
-                [user_id, fortune_id, color_id],
+                'INSERT INTO fortune_results (user_id, fortune_id, color_code) VALUES (?, ?, ?)',
+                [user_id, fortune_id, color_code],
                 (insertErr) => {
                     if (insertErr) {
                         console.error('Error recording fortune result:', insertErr.message);

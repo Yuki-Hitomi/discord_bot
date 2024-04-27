@@ -2,7 +2,7 @@ CREATE TABLE fortune_results (
     id INTEGER PRIMARY KEY,
     user_id TEXT UNIQUE,
     fortune_id INTEGER,
-    color_id INTEGER,
+    color_code TEXT,
     created_at TEXT,
     updated_at TEXT,
     delete_flg INTEGER DEFAULT 0
