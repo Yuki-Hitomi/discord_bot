@@ -10,8 +10,19 @@ module.exports = {
         .setDescription('運勢とラッキーカラーを表示します。'),
 
     async execute(interaction) {
-        const currentDate = new Date();
-
+        const formattedDate = new Date().toISOString().slice(0, 10);
+        
+        db.get('SELECT * FROM fortune_results WHERE user_id = ? AND DATE(updated_at) = DATE(?)', [interaction.user.id, formattedDate], (err, row) => {
+            if (err) {
+                console.error(err.message);
+                return;
+            }
+            if (row) {
+                console.log('日付と一致するデータが見つかりました:', row);
+            } else {
+                console.log('日付と一致するデータは見つかりませんでした。');
+            }
+        });
         const { fortune_id, fortune_text } = await getRandomFortune();
         const color_code = getRandomColor();
         const canvas = createColorCanvas(color_code);
@@ -22,11 +33,11 @@ module.exports = {
 
         const embed = {
             title: `#${color_code}`,
-            description: 
-            `---DEBUG---\n` + 
-            `[DATETIME]\n${currentDate.toLocaleString()}\n` +
-            `[RGB]\nR: ${red}\nG: ${green}\nB: ${blue}\n` +
-            `---DEBUG---`,
+            description:
+                `---DEBUG---\n` +
+                `[DATE]\n${formattedDate.toString()}\n` +
+                `[RGB]\nR: ${red}\nG: ${green}\nB: ${blue}\n` +
+                `---DEBUG---`,
             color: parseInt(color_code, 16),
             thumbnail: {
                 url: 'attachment://color.png',

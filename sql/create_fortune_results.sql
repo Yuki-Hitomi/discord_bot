@@ -13,8 +13,8 @@ AFTER INSERT ON fortune_results
 FOR EACH ROW
 BEGIN
     UPDATE fortune_results
-    SET created_at = DATETIME('now'),
-        updated_at = DATETIME('now')
+    SET created_at = datetime('now', 'localtime'),
+        updated_at = datetime('now', 'localtime')
     WHERE id = NEW.id;
 END;
 
@@ -23,6 +23,6 @@ AFTER UPDATE ON fortune_results
 FOR EACH ROW
 BEGIN
     UPDATE fortune_results
-    SET updated_at = DATETIME('now')
+    SET updated_at = datetime('now', 'localtime')
     WHERE id = NEW.id;
 END;
