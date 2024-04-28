@@ -13,15 +13,17 @@ module.exports = {
 
     // コマンドの実行
     async execute(interaction) {
+        console.info(`/fortune is being executed by ${interaction.user.username}`);
+
         // データベースから当日のデータを取得
         db.get('SELECT * FROM fortune_results WHERE user_id = ? AND DATE(updated_at) = DATE(\'now\', \'localtime\')', [interaction.user.id], async (err, row) => {
             if (err) {
                 console.error(err.message);
                 return;
             }
-            
+
             let fortune_id, fortune_text, color_code;
-            
+
             if (row) {
                 // データがある場合はリザルトテーブルから取得
                 console.info('Data matching the date was found:', row);
@@ -38,26 +40,26 @@ module.exports = {
                 color_code = getRandomColor();
                 recordFortuneResult(interaction.user.id, fortune_id, color_code);
             }
-    
+
             // カラーキャンバスを作成
             console.info('Creating color canvas...');
             const canvas = createColorCanvas(color_code);
-    
+
             // カラーコードからRGBに変換
             const red = parseInt(color_code.substring(0, 2), 16);
             const green = parseInt(color_code.substring(2, 4), 16);
             const blue = parseInt(color_code.substring(4, 6), 16);
-    
+
             // エンベッドの設定
             const embed = {
                 title: `#${color_code}`,
-                description:`[Red: ${red}, Green: ${green}, Blue: ${blue}]`,
+                description: `[Red: ${red}, Green: ${green}, Blue: ${blue}]`,
                 color: parseInt(color_code, 16),
                 thumbnail: {
                     url: 'attachment://color.png',
                 },
             };
-    
+
             // リプライを送信
             console.info('Sending reply...');
             await interaction.reply({
@@ -65,11 +67,11 @@ module.exports = {
                 files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
                 embeds: [embed]
             });
-    
+
             console.info(`/fortune was executed by ${interaction.user.username}`);
         });
     }
-    
+
 };
 
 // ランダムな運勢を取得する関数
