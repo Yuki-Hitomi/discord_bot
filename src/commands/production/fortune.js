@@ -24,14 +24,14 @@ module.exports = {
             
             if (row) {
                 // データがある場合はリザルトテーブルから取得
-                console.log('Data matching the date was found:', row);
+                console.info('Data matching the date was found:', row);
                 fortune_id = row.fortune_id;
                 const fortuneRow = await getFortuneById(fortune_id);
                 fortune_text = fortuneRow.fortune_text;
                 color_code = row.color_code;
             } else {
                 // データがない場合はランダムな運勢を取得して記録
-                console.log('No data found for today. Generating new fortune...');
+                console.info('No data found for today. Generating new fortune...');
                 const { fortune_id: id, fortune_text: text } = await getRandomFortune();
                 fortune_id = id;
                 fortune_text = text;
@@ -40,7 +40,7 @@ module.exports = {
             }
     
             // カラーキャンバスを作成
-            console.log('Creating color canvas...');
+            console.info('Creating color canvas...');
             const canvas = createColorCanvas(color_code);
     
             // カラーコードからRGBに変換
@@ -59,7 +59,7 @@ module.exports = {
             };
     
             // リプライを送信
-            console.log('Sending reply...');
+            console.info('Sending reply...');
             await interaction.reply({
                 content: `今日の${interaction.member.displayName}の運勢は${fortune_text}です！\nラッキーカラーは #${color_code} です！`,
                 files: [{ attachment: canvas.toBuffer(), name: 'color.png' }],
@@ -133,7 +133,7 @@ function recordFortuneResult(user_id, fortune_id, color_code) {
                     if (updateErr) {
                         console.error('Error updating fortune result:', updateErr.message);
                     } else {
-                        console.log('Fortune result updated successfully.');
+                        console.info('Fortune result updated successfully.');
                     }
                 }
             );
@@ -146,7 +146,7 @@ function recordFortuneResult(user_id, fortune_id, color_code) {
                     if (insertErr) {
                         console.error('Error recording fortune result:', insertErr.message);
                     } else {
-                        console.log('Fortune result recorded successfully.');
+                        console.info('Fortune result recorded successfully.');
                     }
                 }
             );
