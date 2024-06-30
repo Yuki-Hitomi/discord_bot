@@ -24,11 +24,11 @@ for (const folder of commandFolders) {
 const rest = new REST().setToken(token);
 
 if (guildId) {
-    rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
-        .then(() => console.info('Successfully reloaded all guild commands.'))
-        .catch(console.error);
+	rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
+		.then(() => console.info('Successfully reloaded all guild commands.'))
+		.catch(console.error);
 } else {
-    rest.put(Routes.applicationCommands(clientId), { body: commands })
-        .then(() => console.info('Successfully reloaded all global commands.'))
-        .catch(console.error);
+	rest.put(Routes.applicationCommands(clientId), { body: commands })
+		.then(() => console.info('Successfully reloaded all global commands.'))
+		.catch(console.error);
 }
