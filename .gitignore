@@ -2,3 +2,4 @@ node_modules
 database
 config.json
 src/commands/development
+*.sql
