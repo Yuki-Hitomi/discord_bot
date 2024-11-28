@@ -1,5 +1,5 @@
 database
 node_modules
 sql
-src/commands/development
+src/commands/staging
 config.json
