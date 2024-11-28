@@ -30,7 +30,7 @@ for (const folder of commandFolders) {
 		}
 	}
 
-	console.info(`Deploying PRODUCTION commands...`);
+	console.info(`Deploying ${folder} commands...`);
 	rest.put(Routes.applicationCommands(clientId), { body: commands })
 		.then(() => console.info(`Successfully deployed ${folder} commands.`))
 		.catch(console.error);
